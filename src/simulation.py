@@ -1,4 +1,5 @@
 
+import csv
 from src.sheep import Sheep
 from src.wolf import Wolf
 
@@ -24,6 +25,7 @@ class Simulation:
 
     def run(self, max_rounds=50):
         log_rounds = []
+        csv_logs = []
 
         for round_no in range(max_rounds):
 
@@ -70,6 +72,14 @@ class Simulation:
             }
 
             log_rounds.append(round_data)
+            csv_logs.append({"round_no": round_no, "alive_count": alive_count})
 
         with open("pos.json", "w") as f:
             json.dump(log_rounds, f, indent=4)
+
+        with open("alive.csv", "w") as f:
+            fieldnames = ['round_no', 'alive_count']
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+
+            writer.writeheader()
+            writer.writerows(csv_logs)
