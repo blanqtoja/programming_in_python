@@ -1,17 +1,25 @@
 import random
 
+
 class Sheep:
-    def __init__(self, initial_position_limit, step = 0.5):
+    def __init__(self, x, y, step=0.5):
 
-        init_x = random.random(-initial_position_limit, initial_position_limit)
-        init_y = random.random(-initial_position_limit, initial_position_limit)
+        self._x = x
+        self._y = y
+        self._step = step
 
-        self.x = init_x
-        self.y = init_y
-        self.step = step
-        self.active = True 
-    
-    
+    @property
+    def x(self):
+        return self._x
+
+    @property
+    def y(self):
+        return self._y
+
+    @property
+    def step(self):
+        return self._step
+
     def move(self):
         dir = random.randint(0, 4)
 
@@ -29,6 +37,3 @@ class Sheep:
         # up
         if dir == 4:
             self.y += self.y
-
-    def deactivate(self):
-        self.active = False
