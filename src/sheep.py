@@ -12,28 +12,32 @@ class Sheep:
     def x(self):
         return self._x
 
+    @x.setter
+    def x(self, value):
+        self._x = value
+
     @property
     def y(self):
         return self._y
+
+    @y.setter
+    def y(self, value):
+        self._y = value
 
     @property
     def step(self):
         return self._step
 
     def move(self):
-        dir = random.randint(0, 4)
 
-        # left
-        if dir == 0:
-            self.x -= self.x
+        directions = [
+            (-self.step, 0),  # left
+            (self.step, 0),   # right
+            (0, -self.step),  # down
+            (0, self.step),  # up
+        ]
 
-        # rigth
-        if dir == 1:
-            self.x += self.x
+        dx, dy = random.choice(directions)
 
-        # down
-        if dir == 3:
-            self.y -= self.y
-        # up
-        if dir == 4:
-            self.y += self.y
+        self.x += dx
+        self.y += dy

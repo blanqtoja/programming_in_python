@@ -11,9 +11,17 @@ class Wolf:
     def x(self):
         return self._x
 
+    @x.setter
+    def x(self, value):
+        self._x = value
+
     @property
     def y(self):
         return self._y
+
+    @y.setter
+    def y(self, value):
+        self._y = value
 
     @property
     def step(self):
@@ -25,11 +33,10 @@ class Wolf:
         dy = sheep.y - self.y
 
         length = sqrt(dx * dx + dy * dy)
-
         if length <= self.step:
             self.x = sheep.x
-            self.y = sheep.x
-            return False
+            self.y = sheep.y
+            return True
 
         # normalize
         ux = dx / length
@@ -37,4 +44,4 @@ class Wolf:
 
         self.x += ux * self.step
         self.y += uy * self.step
-        return True
+        return False

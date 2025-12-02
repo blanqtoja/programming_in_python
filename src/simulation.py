@@ -1,9 +1,10 @@
 
 import csv
+import json
+from random import randrange
+
 from src.sheep import Sheep
 from src.wolf import Wolf
-
-import json
 
 
 class Simulation:
@@ -13,8 +14,15 @@ class Simulation:
     # the distance of sheep movement: 0.5;
     # the distance of wolf movement: 1.0.
     def __init__(self, sheeps_count=15, initial_position_limit=10, sheep_step=0.5, wolf_step=1.0):
-        self.sheeps = list(Sheep(i, initial_position_limit=initial_position_limit,
-                           step=sheep_step) for i in range(sheeps_count))
+
+        self.sheeps = list(
+            Sheep(
+                x=randrange(-initial_position_limit,
+                            initial_position_limit),
+                y=randrange(-initial_position_limit,
+                            initial_position_limit),
+                step=sheep_step
+            ) for _ in range(sheeps_count))
         self.wolf = Wolf(x=0, y=0, step=wolf_step)
 
     def distance_to_sheep(self, sheep):
@@ -77,7 +85,7 @@ class Simulation:
         with open("pos.json", "w") as f:
             json.dump(log_rounds, f, indent=4)
 
-        with open("alive.csv", "w") as f:
+        with open("alive.csv", "w", newline="") as f:
             fieldnames = ['round_no', 'alive_count']
             writer = csv.DictWriter(f, fieldnames=fieldnames)
 
