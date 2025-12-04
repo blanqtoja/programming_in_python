@@ -25,7 +25,7 @@ def setup_logging(log_level: str) -> None:
     )
 
 
-def load_config(config_file) -> dict:
+def load_config(config_file: str) -> dict:
     '''Loads configuration from a file INI'''
     config = configparser.ConfigParser()
     config.read(config_file)
@@ -48,18 +48,22 @@ def load_config(config_file) -> dict:
         raise ValueError(f"Invalid value in config file: {e}")
 
 
-def main():
-    parser = argparse.ArgumentParser(
-        description="Wolf and Sheep Simulation"
-    )
-    parser.add_argument('-c', '--config', help='Path to configuration file')
-    parser.add_argument('-l', '--log', help='Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)')
-    parser.add_argument('-r', '--rounds', type=int, help='Maximum number of rounds')
-    parser.add_argument('-s', '--sheep', type=int, help='Number of sheep')
-    parser.add_argument('-w', '--wait', action='store_true', help='Wait for key press after each round')
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Wolf and Sheep Simulation")
+    parser.add_argument('-c', '--config', 
+                        help='Path to configuration file')
+    parser.add_argument('-l', '--log', 
+                        help='Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)')
+    parser.add_argument('-r', '--rounds', 
+                        type=int, default=50, 
+                        help='Maximum number of rounds')
+    parser.add_argument('-s', '--sheep', default=15,
+                        type=int, help='Number of sheep')
+    parser.add_argument('-w', '--wait', 
+                        action='store_true', help='Wait for key press after each round')
 
     args = parser.parse_args()
-    if args.config:
+    if args.log:
         try:
             setup_logging(args.log)
         except ValueError as e:
@@ -87,6 +91,19 @@ def main():
             print(f"Configuration error: {e}")
             sys.exit(1)
 
+    simulation = Simulation(
+        sheeps_count=args.sheep,
+        initial_position_limit=sim_params['initial_position_limit'],
+        sheep_step=sim_params['sheep_step'],
+        wolf_step=sim_params['wolf_step']
+    )
+
+    simulation.run(max_rounds=args.rounds, wait=args.wait)
+
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        logging.critical(f"Unhandled exception: {e}", exc_info=True)
