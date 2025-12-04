@@ -2,7 +2,7 @@ import random
 
 
 class Sheep:
-    def __init__(self, x, y, step=0.5):
+    def __init__(self, x, y, step = 0.5):
 
         self._x = x
         self._y = y

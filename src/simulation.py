@@ -1,29 +1,36 @@
 
 import csv
 import json
-from random import randrange
+from random import uniform
 
 from src.sheep import Sheep
 from src.wolf import Wolf
 
 
 class Simulation:
-    # the maximum number of rounds: 50;
-    # the number of sheep: 15;
-    # the absolute value of the limit imposed on each coordinate of the initial positions of sheep: 10.0 (which implies that the respective range is [-10.0; 10.0]);
-    # the distance of sheep movement: 0.5;
-    # the distance of wolf movement: 1.0.
-    def __init__(self, sheeps_count=15, initial_position_limit=10, sheep_step=0.5, wolf_step=1.0):
-
+    '''
+    the maximum number of rounds: 50;
+    the number of sheep: 15;
+    the absolute value of the limit imposed on each coordinate of the initial positions of sheep: 
+    10.0 (which implies that the respective range is [-10.0; 10.0]);
+    the distance of sheep movement: 0.5;
+    the distance of wolf movement: 1.0.
+    '''
+    def __init__(self, 
+                 sheeps_count = 15, 
+                 initial_position_limit = 10, 
+                 sheep_step = 0.5, 
+                 wolf_step = 1.0):
+        
         self.sheeps = list(
             Sheep(
-                x=randrange(-initial_position_limit,
+                x = uniform(-initial_position_limit,
                             initial_position_limit),
-                y=randrange(-initial_position_limit,
+                y = uniform(-initial_position_limit,
                             initial_position_limit),
-                step=sheep_step
+                step = sheep_step
             ) for _ in range(sheeps_count))
-        self.wolf = Wolf(x=0, y=0, step=wolf_step)
+        self.wolf = Wolf(x = 0, y = 0, step = wolf_step)
 
     def distance_to_sheep(self, sheep):
         dx = sheep.x - self.wolf.x
@@ -47,7 +54,7 @@ class Simulation:
                 sheep.move()
 
             nearest_index, nearest_sheep = min(
-                sheeps_alive, key=lambda t: self.distance_to_sheep(t[1])
+                sheeps_alive, key = lambda t: self.distance_to_sheep(t[1])
             )
 
             # move wolf
@@ -85,9 +92,9 @@ class Simulation:
         with open("pos.json", "w") as f:
             json.dump(log_rounds, f, indent=4)
 
-        with open("alive.csv", "w", newline="") as f:
+        with open("alive.csv", "w", newline = "") as f:
             fieldnames = ['round_no', 'alive_count']
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer = csv.DictWriter(f, fieldnames = fieldnames)
 
             writer.writeheader()
             writer.writerows(csv_logs)

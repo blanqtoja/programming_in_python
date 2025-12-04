@@ -2,7 +2,7 @@ from math import sqrt
 
 
 class Wolf:
-    def __init__(self, x=0, y=0, step=1.0):
+    def __init__(self, x = 0, y = 0, step = 1.0):
         self._x = x
         self._y = y
         self._step = step
@@ -15,7 +15,10 @@ class Wolf:
     def x(self, value):
         self._x = value
 
-    @property
+    # kurde tyyy ja nie wiedziałem że ty znasz takie chwyty
+    # na plus w sensie, jak coś to nie mówię tego uszczypliwie 
+    # 👌👌
+    @property   
     def y(self):
         return self._y
 
