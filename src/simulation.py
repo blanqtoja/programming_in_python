@@ -17,20 +17,20 @@ class Simulation:
     the distance of wolf movement: 1.0.
     '''
     def __init__(self, 
-                 sheeps_count = 15, 
-                 initial_position_limit = 10, 
-                 sheep_step = 0.5, 
-                 wolf_step = 1.0):
+                 sheeps_count=15, 
+                 initial_position_limit=10, 
+                 sheep_step=0.5, 
+                 wolf_step=1.0):
         
         self.sheeps = list(
             Sheep(
-                x = uniform(-initial_position_limit,
+                x = uniform(-initial_position_limit, 
                             initial_position_limit),
                 y = uniform(-initial_position_limit,
                             initial_position_limit),
                 step = sheep_step
             ) for _ in range(sheeps_count))
-        self.wolf = Wolf(x = 0, y = 0, step = wolf_step)
+        self.wolf = Wolf(x=0, y=0, step=wolf_step)
 
     def distance_to_sheep(self, sheep):
         dx = sheep.x - self.wolf.x
@@ -38,7 +38,7 @@ class Simulation:
 
         return dx * dx + dy * dy
 
-    def run(self, max_rounds=50):
+    def run(self, max_rounds=50, wait=False):
         log_rounds = []
         csv_logs = []
 
@@ -77,6 +77,9 @@ class Simulation:
                 f"  {chase_msg}\n"
             )
 
+            if wait:
+                input("Press Enter to continue to the next round...")
+
             round_data = {
                 "round_no": round_no,
                 "wolf_pos": [self.wolf.x, self.wolf.y],
@@ -92,9 +95,9 @@ class Simulation:
         with open("pos.json", "w") as f:
             json.dump(log_rounds, f, indent=4)
 
-        with open("alive.csv", "w", newline = "") as f:
+        with open("alive.csv", "w", newline="") as f:
             fieldnames = ['round_no', 'alive_count']
-            writer = csv.DictWriter(f, fieldnames = fieldnames)
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
 
             writer.writeheader()
             writer.writerows(csv_logs)

@@ -2,7 +2,7 @@ from math import sqrt
 
 
 class Wolf:
-    def __init__(self, x = 0, y = 0, step = 1.0):
+    def __init__(self, x=0, y=0, step=1.0):
         self._x = x
         self._y = y
         self._step = step
