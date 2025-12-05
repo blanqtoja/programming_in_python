@@ -27,7 +27,7 @@ class Wolf:
     def step(self) -> float:
         return self._step
 
-    def move(self, sheep: Sheep) -> bool:
+    def move(self, sheep: object) -> bool:
 
         dx = sheep.x - self.x
         dy = sheep.y - self.y
