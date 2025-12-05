@@ -26,7 +26,7 @@ def setup_logging(log_level: str) -> None:
 
 
 def load_config(config_file: str) -> dict:
-    '''Loads configuration from a file INI'''
+    '''Loads configuration from a file .ini'''
     config = configparser.ConfigParser()
     config.read(config_file)
 
@@ -42,6 +42,8 @@ def load_config(config_file: str) -> dict:
         if settings['wolf_move_dist'] <= 0 or settings['sheep_move_dist'] <= 0:
             raise ValueError("Movement distances must be positive numbers")
 
+        return settings
+    
     except KeyError as e:
         raise ValueError(f"Missing missing key in config file: {e}")
     except ValueError as e:

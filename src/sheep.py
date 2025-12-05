@@ -2,32 +2,32 @@ import random
 
 
 class Sheep:
-    def __init__(self, x, y, step=0.5):
+    def __init__(self, x: float, y: float, step: float = 0.5):
         self._x = x
         self._y = y
         self._step = step
 
     @property
-    def x(self):
+    def x(self) -> float:
         return self._x
 
     @x.setter
-    def x(self, value):
+    def x(self, value: float) -> None:
         self._x = value
 
     @property
-    def y(self):
+    def y(self) -> float:
         return self._y
 
     @y.setter
-    def y(self, value):
+    def y(self, value: float) -> None:
         self._y = value
 
     @property
-    def step(self):
+    def step(self) -> float:
         return self._step
 
-    def move(self):
+    def move(self) -> None:
 
         directions = [
             (-self.step, 0),  # left

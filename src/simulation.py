@@ -1,7 +1,6 @@
 import csv
 import logging
 import json
-from math import dist
 from random import uniform
 
 from src.sheep import Sheep
@@ -18,10 +17,10 @@ class Simulation:
     the distance of wolf movement: 1.0.
     '''
     def __init__(self, 
-                 sheeps_count=15, 
-                 initial_position_limit=10, 
-                 sheep_step=0.5, 
-                 wolf_step=1.0):
+                 sheeps_count: int = 15, 
+                 initial_position_limit: int = 10, 
+                 sheep_step: float = 0.5, 
+                 wolf_step: float = 1.0):
         
         self.sheeps = []
         for i in range(sheeps_count):
@@ -35,13 +34,13 @@ class Simulation:
         logging.info("Initial positions of all sheep were determined")
         self.wolf = Wolf(x=0, y=0, step=wolf_step)
 
-    def distance_to_sheep(self, sheep):
+    def distance_to_sheep(self, sheep: Sheep) -> float:
         dx = sheep.x - self.wolf.x
         dy = sheep.y - self.wolf.y
 
         return dx * dx + dy * dy
 
-    def run(self, max_rounds=50, wait=False):
+    def run(self, max_rounds: int = 50, wait: bool = False) -> None:
         log_rounds = []
         csv_logs = []
 
