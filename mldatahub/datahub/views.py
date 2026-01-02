@@ -45,20 +45,19 @@ def add(request):
 
 
 def api_data(request):
-    records = Record.objects.all()
-    data = []
-    for record in records:
-        data.append({
-            "id": record.id,
-            "continuous_feature1": record.continuous_feature1,
-            "continuous_feature2": record.continuous_feature2,
-            "categorical_feature1": record.categorical_feature1
-        })
-    return JsonResponse(data, safe=False)
+    if request.method == "GET":
+        records = Record.objects.all()
+        data = []
+        for record in records:
+            data.append({
+                "id": record.id,
+                "continuous_feature1": record.continuous_feature1,
+                "continuous_feature2": record.continuous_feature2,
+                "categorical_feature1": record.categorical_feature1
+            })
+        return JsonResponse(data, safe=False)
 
-
-def api_add(request):
-    if request.method == "POST":
+    elif request.method == "POST":
         try:
             body = json.loads(request.body.read())
 
