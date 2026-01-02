@@ -55,7 +55,10 @@ def api_data(request):
                 "continuous_feature2": record.continuous_feature2,
                 "categorical_feature1": record.categorical_feature1
             })
-        return JsonResponse(data, safe=False)
+        if not data:
+            return JsonResponse(data, safe=False, status=HTTPStatus.NO_CONTENT)
+        else:
+            return JsonResponse(data, safe=False)
 
     elif request.method == "POST":
         try:
