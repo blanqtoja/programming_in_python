@@ -8,7 +8,9 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("delete/<int:record_id>/", views.delete, name="delete"),
     path("add", views.add, name="add"),
+    path("predict", views.predict, name="predict"),
+
     path("api/data", views.api_data, name="api_data"),
     path("api/data/<int:record_id>", views.api_delete, name="api_delete"),
-    path("predict", views.predict, name="predict"),
+    path("api/predict", views.api_predict, name="api_predict"),
 ]

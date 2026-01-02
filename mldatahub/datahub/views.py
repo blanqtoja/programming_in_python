@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404, JsonResponse, HttpResponseBadRequest
 
 from .services import delete_record, create_record, list_records
-from .serializers import serialize_records
+from .serializers import parse_predict_input, serialize_records
 from .forms import RecordForm, PredictForm
 from .models import Record
 from .predictor import predict_category
@@ -119,3 +119,30 @@ def predict(request):
     else:
         form = RecordForm()
         return render(request, "datahub/predict.html", {"form": form})
+
+
+def api_predict(request):
+    if request.method == "GET":
+        try:
+            data = {
+                'continuous_feature1': request.GET.get('continuous_feature1'),
+                'continuous_feature2': request.GET.get('continuous_feature2'),
+            }
+            float1, float2 = parse_predict_input(data)
+            prediction = predict_category(float1, float2)
+            return JsonResponse({"predicted_category": int(prediction)}, status=HTTPStatus.OK)
+        except (ValueError, KeyError, TypeError) as e:
+            return JsonResponse(
+                {
+                    "error": str(e),
+                    "message": "Invalid data",
+                },
+                status=HTTPStatus.BAD_REQUEST
+            )
+    else:
+        return JsonResponse(
+            {
+                "message": "Invalid method",
+            },
+            status=HTTPStatus.BAD_REQUEST
+        )
