@@ -18,9 +18,9 @@ def delete(request, record_id):
             record.delete()
             return redirect("datahub:index")
         except Http404:
-            return render(request, "datahub/error_404.html", status=404)
+            return render(request, "datahub/error_404.html", status=HTTPStatus.NOT_FOUND)
     else:
-        return render(request, "datahub/error_400.html", status=400)
+        return render(request, "datahub/error_400.html", status=HTTPStatus.BAD_REQUEST)
 
 
 def add(request):
@@ -38,10 +38,10 @@ def add(request):
 
             return redirect("datahub:index")
         except (ValueError, TypeError):
-            return render(request, "datahub/error_400.html", status=400)
+            return render(request, "datahub/error_400.html", status=HTTPStatus.BAD_REQUEST)
     else:
         # render form
-        return render(request, "datahub/add.html", status=200)
+        return render(request, "datahub/add.html")
 
 
 def api_data(request):
@@ -60,7 +60,7 @@ def api_data(request):
 def api_add(request):
     if request.method == "POST":
         try:
-            body = json.load(request.body)
+            body = json.loads(request.body.read())
 
             record = Record.objects.create(
                 continuous_feature1=body["continuous_feature1"],
@@ -93,3 +93,24 @@ def api_add(request):
 # If the validation fails,
 #   a response incorporating the 404 HTTP status code and comprising a JSON that contains a dictionary specifying
 #   a relevant error message (e.g., "Record not found") should be generated.
+
+def api_delete(request, record_id):
+    if request.method == "DELETE":
+        try:
+            record = get_object_or_404(Record, pk=record_id)
+            record.delete()
+            return JsonResponse({"record_id": record.id}, status=HTTPStatus.OK)
+        except Http404 as e:
+            return JsonResponse(
+                {
+                    "error": e,
+                    "message": "Record not found",
+                },
+                status=HTTPStatus.NOT_FOUND
+            )
+    else:
+        return HttpResponseBadRequest(
+            {
+                "message": "Invalid method",
+            }
+        )
