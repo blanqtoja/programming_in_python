@@ -1,47 +1,16 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prediction</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 500px;
-            margin: 50px auto;
-            padding: 20px;
-            text-align: center;
-            background-color: #f8f9fa;
-        }
-        .result-container {
-            background-color: #006eff;
-            border: 1px solid #f5c6cb;
-            border-radius: 4px;
-            padding: 20px;
-            color: #721c24;
-        }
-        h1 {
-            margin-top: 0;
-            color: #ebebeb;
-        }
-        a {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-        }
-        a:hover x{
-            background-color: #0056b3;
-        }
-    </style>
+    <title>Prediction Result</title>
+    <link rel="stylesheet" href="{% static 'datahub/style.css' %}">
 </head>
 <body>
-    <div class="result-container">
-        <h1>Predicted category:</h1>
-        <p>{{predicted_category}}</p>
+    <div class="message-container result-container">
+        <h1>Predicted Category</h1>
+        <p><strong>{{predicted_category}}</strong></p>
         <a href="{% url 'datahub:predict' %}">Predict again</a>
         <a href="{% url 'datahub:index' %}">Back to home</a>
     </div>

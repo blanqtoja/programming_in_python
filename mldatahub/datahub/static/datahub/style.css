@@ -61,7 +61,6 @@ form {
     display: inline;
 }
 
-/* Add form styles */
 .form-container {
     max-width: 500px;
     margin: 20px auto;
@@ -96,4 +95,46 @@ input:focus {
 .form-group {
     display: flex;
     flex-direction: column;
+}
+
+.message-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.result-container {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+}
+
+.error-container {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+.message-container h1 {
+    margin-top: 0;
+    font-size: 24px;
+}
+
+.message-container p {
+    margin: 10px 0;
+}
+
+.message-container a {
+    display: inline-block;
+    margin: 10px 5px;
+    padding: 8px 16px;
+    background-color: #0066cc;
+    color: white;
+    text-decoration: none;
+}
+
+.message-container a:hover {
+    background-color: #0052a3;
 }
