@@ -2,6 +2,8 @@ import json
 from http import HTTPStatus
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404, JsonResponse, HttpResponseBadRequest
+
+from .forms import RecordForm
 from .models import Record
 
 
@@ -25,23 +27,20 @@ def delete(request, record_id):
 
 def add(request):
     if request.method == "POST":
-        try:
-            continuous_feature1 = float(request.POST.get("float1"))
-            continuous_feature2 = float(request.POST.get("float2"))
-            categorical_feature1 = int(request.POST.get("int_value"))
-
+        form = RecordForm(request.POST)
+        if form.is_valid():
             Record.objects.create(
-                continuous_feature1=continuous_feature1,
-                continuous_feature2=continuous_feature2,
-                categorical_feature1=categorical_feature1
+                continuous_feature1=form.cleaned_data["float1"],
+                continuous_feature2=form.cleaned_data["float2"],
+                categorical_feature1=form.cleaned_data["int_value1"],
             )
 
             return redirect("datahub:index")
-        except (ValueError, TypeError):
-            return render(request, "datahub/error_400.html", status=HTTPStatus.BAD_REQUEST)
+        return render(request, "datahub/add.html", {"form": form}, status=HTTPStatus.BAD_REQUEST)
+
     else:
-        # render form
-        return render(request, "datahub/add.html")
+        form = RecordForm()
+        return render(request, "datahub/add.html", {"form": form})
 
 
 def api_data(request):

@@ -13,17 +13,15 @@
         <h1>Add Record</h1>
         <form method="POST" action="{% url 'datahub:add' %}">
             {% csrf_token %}
-            <div class="form-group">
-                <label for="float1">Float Value 1:</label>
-                <input type="number" id="float1" name="float1" required>
+            {{ form.non_field_errors }}
+            <div>
+                {{ form.float1.label_tag }} {{ form.float1 }} {{ form.float1.errors }}
             </div>
-            <div class="form-group">
-                <label for="float2">Float Value 2:</label>
-                <input type="number" id="float2" name="float2" required>
+            <div>
+                {{ form.float2.label_tag }} {{ form.float2 }} {{ form.float2.errors }}
             </div>
-            <div class="form-group">
-                <label for="int_value">Integer Value:</label>
-                <input type="number" id="int_value" name="int_value" required>
+            <div>
+                {{ form.int_value1.label_tag }} {{ form.int_value1 }} {{ form.int_value1.errors }}
             </div>
             <button type="submit">Add Record</button>
         </form>
