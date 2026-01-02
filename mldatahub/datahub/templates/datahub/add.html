@@ -1,64 +1,32 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Record</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 500px;
-            margin: 50px auto;
-            padding: 20px;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        label {
-            font-weight: bold;
-        }
-        input {
-            padding: 8px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'datahub/style.css' %}">
 </head>
 <body>
-    <a href="{% url 'datahub:index' %}">
-        <button>Home</button>
-    </a>
-    <h1>Add Record</h1>
-    <form method="POST" action="{% url 'datahub:add' %}">
-        {% csrf_token %}
-        <div>
-            <label for="float1">Float Value 1:</label>
-            <input type="number" id="float1" name="float1" required>
-        </div>
-        <div>
-            <label for="float2">Float Value 2:</label>
-            <input type="number" id="float2" name="float2" required>
-        </div>
-        <div>
-            <label for="int_value">Integer Value:</label>
-            <input type="number" id="int_value" name="int_value" type="integer" required>
-        </div>
-        <button type="submit">Add Record</button>
-    </form>
+    <a href="{% url 'datahub:index' %}"><button>Home</button></a>
+    <div class="form-container">
+        <h1>Add Record</h1>
+        <form method="POST" action="{% url 'datahub:add' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="float1">Float Value 1:</label>
+                <input type="number" id="float1" name="float1" required>
+            </div>
+            <div class="form-group">
+                <label for="float2">Float Value 2:</label>
+                <input type="number" id="float2" name="float2" required>
+            </div>
+            <div class="form-group">
+                <label for="int_value">Integer Value:</label>
+                <input type="number" id="int_value" name="int_value" required>
+            </div>
+            <button type="submit">Add Record</button>
+        </form>
+    </div>
 </body>
 </html>
