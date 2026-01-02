@@ -3,12 +3,14 @@ from http import HTTPStatus
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404, JsonResponse, HttpResponseBadRequest
 
+from .services import delete_record, create_record, list_records
+from .serializers import serialize_records
 from .forms import RecordForm
 from .models import Record
 
 
 def index(request):
-    records = Record.objects.order_by("id")
+    records = list_records()
     context = {"records": records}
     return render(request, "datahub/index.html", context)
 
@@ -16,8 +18,7 @@ def index(request):
 def delete(request, record_id):
     if request.method == "POST":
         try:
-            record = get_object_or_404(Record, pk=record_id)
-            record.delete()
+            rec_id = delete_record(record_id)
             return redirect("datahub:index")
         except Http404:
             return render(request, "datahub/error_404.html", status=HTTPStatus.NOT_FOUND)
@@ -29,12 +30,11 @@ def add(request):
     if request.method == "POST":
         form = RecordForm(request.POST)
         if form.is_valid():
-            Record.objects.create(
+            record = create_record(
                 continuous_feature1=form.cleaned_data["float1"],
                 continuous_feature2=form.cleaned_data["float2"],
                 categorical_feature1=form.cleaned_data["int_value1"],
             )
-
             return redirect("datahub:index")
         return render(request, "datahub/add.html", {"form": form}, status=HTTPStatus.BAD_REQUEST)
 
@@ -45,29 +45,14 @@ def add(request):
 
 def api_data(request):
     if request.method == "GET":
-        records = Record.objects.all()
-        data = []
-        for record in records:
-            data.append({
-                "id": record.id,
-                "continuous_feature1": record.continuous_feature1,
-                "continuous_feature2": record.continuous_feature2,
-                "categorical_feature1": record.categorical_feature1
-            })
-        if not data:
-            return JsonResponse(data, safe=False, status=HTTPStatus.NO_CONTENT)
-        else:
-            return JsonResponse(data, safe=False)
+        records = serialize_records()
+        return JsonResponse(records, safe=False)
 
     elif request.method == "POST":
         try:
-            body = json.loads(request.body.read())
+            body = json.loads(request.body)
+            record = create_record(**body)
 
-            record = Record.objects.create(
-                continuous_feature1=body["continuous_feature1"],
-                continuous_feature2=body["continuous_feature2"],
-                categorical_feature1=body["categorical_feature1"]
-            )
             return JsonResponse({"record_id": record.id}, status=HTTPStatus.CREATED)
         except (ValueError, TypeError, KeyError) as e:
             return HttpResponseBadRequest(
@@ -98,9 +83,8 @@ def api_data(request):
 def api_delete(request, record_id):
     if request.method == "DELETE":
         try:
-            record = get_object_or_404(Record, pk=record_id)
-            record.delete()
-            return JsonResponse({"record_id": record.id}, status=HTTPStatus.OK)
+            rec_id = delete_record(record_id)
+            return JsonResponse({"record_id": rec_id}, status=HTTPStatus.OK)
         except Http404 as e:
             return JsonResponse(
                 {
