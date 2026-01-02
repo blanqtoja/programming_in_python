@@ -5,8 +5,9 @@ from django.http import HttpResponse, Http404, JsonResponse, HttpResponseBadRequ
 
 from .services import delete_record, create_record, list_records
 from .serializers import serialize_records
-from .forms import RecordForm
+from .forms import RecordForm, PredictForm
 from .models import Record
+from .predictor import predict_category
 
 
 def index(request):
@@ -99,3 +100,22 @@ def api_delete(request, record_id):
                 "message": "Invalid method",
             }
         )
+
+
+def predict(request):
+    if request.method == "POST":
+        form = PredictForm(request.POST)
+        if form.is_valid():
+
+            prediction = predict_category(
+                float1=form.cleaned_data["float1"],
+                float2=form.cleaned_data["float2"],
+            )
+
+            return render(request, "datahub/predict_result.html", {"predicted_category": prediction})
+
+        return render(request, "datahub/predict.html", {"form": form}, status=HTTPStatus.BAD_REQUEST)
+
+    else:
+        form = RecordForm()
+        return render(request, "datahub/predict.html", {"form": form})

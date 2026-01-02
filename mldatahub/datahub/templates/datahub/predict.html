@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predict category</title>
+    <link rel="stylesheet" href="{% static 'datahub/style.css' %}">
+</head>
+<body>
+    <a href="{% url 'datahub:index' %}"><button>Home</button></a>
+    <div class="form-container">
+        <h1>Predict category</h1>
+        <form method="POST" action="{% url 'datahub:predict' %}">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div>
+                {{ form.float1.label_tag }} {{ form.float1 }} {{ form.float1.errors }}
+            </div>
+            <div>
+                {{ form.float2.label_tag }} {{ form.float2 }} {{ form.float2.errors }}
+            </div>
+            
+            <button type="submit">Predict</button>
+        </form>
+    </div>
+</body>
+</html>
