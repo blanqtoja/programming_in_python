@@ -1,5 +1,5 @@
 import json
-from django.http import HttpResponse, Http404, JsonResponse, HttpResponseBadRequest
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 
 from .models import Record

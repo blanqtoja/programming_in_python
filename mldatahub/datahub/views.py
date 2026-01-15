@@ -1,8 +1,7 @@
 import json
 from http import HTTPStatus
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, Http404, JsonResponse, HttpResponseBadRequest
-
+from django.http import HttpResponse, Http404, JsonResponse
 from .services import delete_record, create_record, list_records
 from .serializers import parse_predict_input, serialize_records
 from .forms import RecordForm, PredictForm
@@ -56,30 +55,20 @@ def api_data(request):
 
             return JsonResponse({"record_id": record.id}, status=HTTPStatus.CREATED)
         except (ValueError, TypeError, KeyError) as e:
-            return HttpResponseBadRequest(
+            return JsonResponse(
                 {
-                    "error": e,
+                    "error": str(e),
                     "message": "Invalid data",
-                }
+                },
+                status=HTTPStatus.BAD_REQUEST
             )
     else:
-        return HttpResponseBadRequest(
+        return JsonResponse(
             {
                 "message": "Invalid method",
-            }
+            },
+            status=HTTPStatus.BAD_REQUEST
         )
-
-
-# DELETE /api/data/<record_id>
-# (where <record_id> stands for the primary key of a record) -
-# deletes a data point from the database.
-#  The <record_id> should be validated to check if the database contains a record with a matching primary key
-# and if the validation succeeds,
-#   the corresponding record should be deleted from the database
-#   and a response comprising a JSON that contains a dictionary specifying the primary key of the deleted record should follow.
-# If the validation fails,
-#   a response incorporating the 404 HTTP status code and comprising a JSON that contains a dictionary specifying
-#   a relevant error message (e.g., "Record not found") should be generated.
 
 def api_delete(request, record_id):
     if request.method == "DELETE":
@@ -89,16 +78,17 @@ def api_delete(request, record_id):
         except Http404 as e:
             return JsonResponse(
                 {
-                    "error": e,
+                    "error": str(e),
                     "message": "Record not found",
                 },
                 status=HTTPStatus.NOT_FOUND
             )
     else:
-        return HttpResponseBadRequest(
+        return JsonResponse(
             {
                 "message": "Invalid method",
-            }
+            },
+            status=HTTPStatus.BAD_REQUEST
         )
 
 
@@ -117,7 +107,7 @@ def predict(request):
         return render(request, "datahub/predict.html", {"form": form}, status=HTTPStatus.BAD_REQUEST)
 
     else:
-        form = RecordForm()
+        form = PredictForm()
         return render(request, "datahub/predict.html", {"form": form})
 
 

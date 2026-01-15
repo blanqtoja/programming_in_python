@@ -12,5 +12,5 @@ urlpatterns = [
 
     path("api/data", views.api_data, name="api_data"),
     path("api/data/<int:record_id>", views.api_delete, name="api_delete"),
-    path("api/predict", views.api_predict, name="api_predict"),
+    path("api/predictions", views.api_predict, name="api_predict"),
 ]
