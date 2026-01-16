@@ -7,6 +7,9 @@ from .serializers import serialize_records
 def train_model(n_neighbors=3):
     records = serialize_records()
 
+    if len(records) == 0:
+        raise ValueError("No records found. Add before prediction")
+
     X = [[rec['continuous_feature1'], rec['continuous_feature2']]
          for rec in records]
     y = [rec['categorical_feature1'] for rec in records]

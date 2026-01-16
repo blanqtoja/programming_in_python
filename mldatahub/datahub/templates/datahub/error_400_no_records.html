@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>400 Bad Request - No Records</title>
+    <link rel="stylesheet" href="{% static 'datahub/style.css' %}">
+</head>
+<body>
+    <div class="message-container error-container">
+        <h1>400 Bad Request</h1>
+        <h2>No Records Found</h2>
+        <p>{{ error_message }}</p>
+        <p>The database does not contain any records for training the prediction model.</p>
+        <p>Please add at least one record before making predictions.</p>
+        <a href="{% url 'datahub:add' %}">Add Record</a>
+        <a href="{% url 'datahub:index' %}">Back to home</a>
+    </div>
+</body>
+</html>

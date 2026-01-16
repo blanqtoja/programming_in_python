@@ -70,6 +70,7 @@ def api_data(request):
             status=HTTPStatus.BAD_REQUEST
         )
 
+
 def api_delete(request, record_id):
     if request.method == "DELETE":
         try:
@@ -96,13 +97,14 @@ def predict(request):
     if request.method == "POST":
         form = PredictForm(request.POST)
         if form.is_valid():
-
-            prediction = predict_category(
-                float1=form.cleaned_data["float1"],
-                float2=form.cleaned_data["float2"],
-            )
-
-            return render(request, "datahub/predict_result.html", {"predicted_category": prediction})
+            try:
+                prediction = predict_category(
+                    float1=form.cleaned_data["float1"],
+                    float2=form.cleaned_data["float2"],
+                )
+                return render(request, "datahub/predict_result.html", {"predicted_category": prediction})
+            except ValueError as e:
+                return render(request, "datahub/error_400_no_records.html", {"error_message": str(e)}, status=HTTPStatus.BAD_REQUEST)
 
         return render(request, "datahub/predict.html", {"form": form}, status=HTTPStatus.BAD_REQUEST)
 
