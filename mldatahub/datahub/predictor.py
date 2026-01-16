@@ -14,7 +14,10 @@ def train_model(n_neighbors=3):
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
 
-    model = KNeighborsClassifier(n_neighbors=n_neighbors)
+    n_samples = len(X_scaled)
+    adjusted_neighbors = min(n_neighbors, n_samples)
+
+    model = KNeighborsClassifier(n_neighbors=adjusted_neighbors)
     model.fit(X_scaled, y)
 
     return model, scaler
